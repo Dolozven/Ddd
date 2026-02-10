@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архитектура первой половины XIX века</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #b8a07e;
+            --accent-color: #8b7355;
+            --light-color: #f5f5f5;
+            --dark-color: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1545324412-626d3d6dfb84?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s forwards 1s;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: white;
+            opacity: 0;
+            animation: fadeIn 2s forwards 2s;
+        }
+
+        .scroll-down i {
+            animation: bounce 2s infinite;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s, transform 1s;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            background: var(--secondary-color);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Styles Section */
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .style-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s, box-shadow 0.5s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .style-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .style-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .style-img {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.8s;
+        }
+
+        .style-card:hover .style-img {
+            transform: scale(1.05);
+        }
+
+        .style-content {
+            padding: 25px;
+        }
+
+        .style-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        /* Timeline Section */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            transform: translateX(50px);
+        }
+
+        .timeline-item:nth-child(even).visible {
+            transform: translateX(0);
+        }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .timeline-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -13px;
+            background-color: white;
+            border: 4px solid var(--secondary-color);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -12px;
+        }
+
+        /* Architects Section */
+        .architects-slider {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+        }
+
+        .architect-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .architect-slide.active {
+            opacity: 1;
+        }
+
+        .architect-img {
+            flex: 1;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .architect-info {
+            flex: 1;
+            padding: 40px;
+            background: white;
+            border-radius: 0 10px 10px 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .architect-info h3 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .slider-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ddd;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .slider-dot.active {
+            background: var(--secondary-color);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .footer-links a {
+            color: white;
+            margin: 0 15px;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+                padding: 0 20px;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+            }
+            
+            .timeline-item:nth-child(even)::after {
+                left: 18px;
+            }
+            
+            .architects-slider {
+                height: auto;
+            }
+            
+            .architect-slide {
+                flex-direction: column;
+                position: relative;
+            }
+            
+            .architect-img {
+                width: 100%;
+                height: 300px;
+                border-radius: 10px 10px 0 0;
+            }
+            
+            .architect-info {
+                border-radius: 0 0 10px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1>Архитектура первой половины XIX века</h1>
+            <p>Эпоха классицизма, ампира и эклектики в европейской и русской архитектуре. Величественные здания, монументальные формы и гармоничные пропорции, отражающие идеалы эпохи.</p>
+        </div>
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <!-- Architectural Styles Section -->
+    <section id="styles" class="styles">
+        <div class="container">
+            <div class="section-title">
+                <h2>Архитектурные стили</h2>
+            </div>
+            <div class="styles-grid">
+                <div class="style-card">
+                    <div class="style-img" style="background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="style-content">
+                        <h3>Классицизм</h3>
+                        <p>Возрождение античных форм и пропорций, строгая симметрия, гармоничность композиции. Характерные черты: колонны, портики, фронтоны, скульптурный декор.</p>
+                    </div>
+                </div>
+                <div class="style-card">
+                    <div class="style-img" style="background-image: url('https://images.unsplash.com/photo-1513584684374-8bab748fbf90?ixlib=rb-1.2.1&auto=format&fit=crop&w-1350&q=80');"></div>
+                    <div class="style-content">
+                        <h3>Ампир</h3>
+                        <p>Поздняя фаза классицизма, зародившаяся во Франции при Наполеоне. Массивные формы, военная эмблематика, роскошный декор, триумфальные мотивы.</p>
+                    </div>
+                </div>
+                <div class="style-card">
+                    <div class="style-img" style="background-image: url('https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="style-content">
+                        <h3>Неоготика</h3>
+                        <p>Возрождение готических форм в XIX веке. Стрельчатые арки, витражи, сложный орнамент, вертикальная направленность композиции.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="timeline-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Хронология развития</h2>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>1800-1815</h3>
+                        <p>Расцвет классицизма в Европе. Строительство Казанского собора в Петербурге (А.Н. Воронихин), Арки на площади Каррузель в Париже.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>1815-1830</h3>
+                        <p>Господство ампира. Возведение Триумфальной арки в Париже (Жан-Франсуа Шальгрен), Александровской колонны в Петербурге (Огюст Монферран).</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>1830-1840</h3>
+                        <p>Появление эклектики. Смешение стилей, рост интереса к национальным архитектурным традициям. Строительство Исаакиевского собора (Монферран).</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>1840-1850</h3>
+                        <p>Распространение неоготики. Возведение Вестминстерского дворца в Лондоне (Чарльз Бэрри), храма Христа Спасителя в Москве (Константин Тон).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architects Section -->
+    <section id="architects" class="architects">
+        <div class="container">
+            <div class="section-title">
+                <h2>Выдающиеся архитекторы</h2>
+            </div>
+            <div class="architects-slider">
+                <div class="architect-slide active">
+                    <div class="architect-img" style="background-image: url('https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="architect-info">
+                        <h3>Карл Росси</h3>
+                        <p>Русский архитектор итальянского происхождения, автор ансамблей Дворцовой площади, Михайловского дворца, здания Главного штаба в Санкт-Петербурге. Крупнейший мастер русского ампира.</p>
+                    </div>
+                </div>
+                <div class="architect-slide">
+                    <div class="architect-img" style="background-image: url('https://images.unsplash.com/photo-1514894780887-121968d00567?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="architect-info">
+                        <h3>Огюст Монферран</h3>
+                        <p>Французский архитектор, работавший в России. Автор Исаакиевского собора и Александровской колонны в Санкт-Петербурге. Сочетал классицизм с элементами других стилей.</p>
+                    </div>
+                </div>
+                <div class="architect-slide">
+                    <div class="architect-img" style="background-image: url('https://images.unsplash.com/photo-1527030280866-4c67e1b1e2b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="architect-info">
+                        <h3>Андрей Воронихин</h3>
+                        <p>Русский архитектор и живописец, представитель классицизма. Главное творение — Казанский собор в Петербурге. Также автор интерьеров Строгановского дворца и здания Горного института.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-nav">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>Архитектура первой половины XIX века — это эпоха величия и гармонии, отразившая исторические перемены и художественные идеалы своего времени.</p>
+                <div class="footer-links">
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+                <div class="copyright">
+                    <p>© 2023 Презентация по истории архитектуры. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll to sections
+            document.querySelector('.scroll-down').addEventListener('click', function() {
+                document.querySelector('#styles').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            });
+
+            // Intersection Observer for section animations
+            const sections = document.querySelectorAll('section');
+            const options = {
+                threshold: 0.2,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // For style cards - stagger animation
+                        if (entry.target.id === 'styles') {
+                            const cards = entry.target.querySelectorAll('.style-card');
+                            cards.forEach((card, index) => {
+                                setTimeout(() => {
+                                    card.classList.add('visible');
+                                }, index * 200);
+                            });
+                        }
+                        
+                        // For timeline items - stagger animation
+                        if (entry.target.id === 'timeline') {
+                            const items = entry.target.querySelectorAll('.timeline-item');
+                            items.forEach((item, index) => {
+                                setTimeout(() => {
+                                    item.classList.add('visible');
+                                }, index * 300);
+                            });
+                        }
+                    }
+                });
+            }, options);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Slider functionality
+            const slides = document.querySelectorAll('.architect-slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            let currentSlide = 0;
+
+            function showSlide(n) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+                
+                currentSlide = (n + slides.length) % slides.length;
+                
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+
+            // Auto slide change
+            setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 5000);
+
+            // Dot click events
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.getAttribute('data-slide'));
+                    showSlide(slideIndex);
+                });
+            });
+        });
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+            
+            // Fade out hero text on scroll
+            const heroContent = document.querySelector('.hero .container');
+            const opacity = 1 - scrolled / 500;
+            heroContent.style.opacity = opacity > 0 ? opacity : 0;
+        });
+    </script>
+</body>
+</html>
